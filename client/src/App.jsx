@@ -3,14 +3,10 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { Button } from "./components/ui/button";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <div>
-      <h1>Setup success</h1>
-      <Button>Click Me</Button>
-    </div>
-  );
+  return <AppRoutes />;
 }
 
 export default App;
