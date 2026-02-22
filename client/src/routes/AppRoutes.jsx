@@ -18,9 +18,9 @@ function AppRoutes() {
         <Routes>
           <Route path="/" element={<Navbar />}>
             <Route index element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/register" element={<RegisterSchool />} />
+            <Route path="login" element={<Login />} />
+            <Route path="signup" element={<Signup />} />
+            <Route path="register" element={<RegisterSchool />} />
           </Route>
 
           <Route path="/admindashboard" element={<AdminLayout />}>
