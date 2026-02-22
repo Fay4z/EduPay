@@ -1,27 +1,52 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const StatCard = ({ title, value }) => {
-  return (
-    <Card className="rounded-2xl shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-3xl font-semibold">{value}</p>
-      </CardContent>
-    </Card>
-  );
-};
+const StatCard = ({ title, value }) => (
+  <Card className="rounded-2xl shadow-sm">
+    <CardHeader>
+      <CardTitle className="text-sm font-medium text-muted-foreground">
+        {title}
+      </CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-3xl font-semibold">{value}</p>
+    </CardContent>
+  </Card>
+);
 
 const AdminDashboard = () => {
-  const stats = {
-    totalStudents: 120,
-    totalFees: 250000,
-    pendingPayments: 45000,
-    monthlyRevenue: 80000,
-  };
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const response = await fetch(
+          "http://localhost:3000/api/admin/dashboard-stats",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const data = await response.json();
+        console.log(data);
+        setStats(data);
+      } catch (error) {
+        console.error("Failed to fetch stats", error);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  console.log("hello");
+  if (!stats) {
+    return <p>Loading dashboard...</p>;
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -35,15 +60,15 @@ const AdminDashboard = () => {
         <StatCard title="Total Students" value={stats.totalStudents} />
         <StatCard
           title="Total Fees Collected"
-          value={`Rs. ${stats.totalFees.toLocaleString()}`}
+          value={`₹ ${stats.totalFees.toLocaleString()}`}
         />
         <StatCard
           title="Pending Payments"
-          value={`Rs. ${stats.pendingPayments.toLocaleString()}`}
+          value={`₹ ${stats.pendingPayments.toLocaleString()}`}
         />
         <StatCard
           title="This Month Revenue"
-          value={`Rs. ${stats.monthlyRevenue.toLocaleString()}`}
+          value={`₹ ${stats.monthlyRevenue.toLocaleString()}`}
         />
       </div>
     </div>

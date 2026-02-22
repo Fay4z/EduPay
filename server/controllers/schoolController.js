@@ -6,7 +6,6 @@ const registerSchool = async (req, res) => {
   try {
     const { schoolName, address, adminName, email, password } = req.body;
 
-    // Check if school already exists
     const existingSchool = await School.findOne({ name: schoolName });
     if (existingSchool) {
       return res.status(400).json({
@@ -14,13 +13,11 @@ const registerSchool = async (req, res) => {
       });
     }
 
-    // Create School
     const school = await School.create({
       name: schoolName,
       address,
     });
 
-    // Create Admin linked to school
     const admin = await User.create({
       name: adminName,
       email,
@@ -29,7 +26,6 @@ const registerSchool = async (req, res) => {
       school: school._id,
     });
 
-    // Generate JWT
     const token = jwt.sign(
       {
         id: admin._id,
