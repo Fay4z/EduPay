@@ -12,6 +12,9 @@ const {
   addStudent,
 } = require("../controllers/adminController");
 const { protect, authorize } = require("../middleware/authMiddleware");
+const {
+  getPaymentForSingleStudent,
+} = require("../controllers/paymentController");
 
 router.get("/dashboard-stats", protect, authorize("admin"), getDashboardStats);
 router.get("/addStudent", protect, authorize("admin"), addStudent);
@@ -20,4 +23,11 @@ router.get("/students", protect, authorize("admin"), getStudents);
 router.get("/students/:id", protect, authorize("admin"), getSingleStudent);
 router.put("/students/:id", protect, authorize("admin"), updateStudent);
 router.delete("/students/:id", protect, authorize("admin"), deleteStudent);
+router.get(
+  "/students/:id/payments",
+  protect,
+  authorize("admin"),
+  getPaymentForSingleStudent,
+);
+
 module.exports = router;

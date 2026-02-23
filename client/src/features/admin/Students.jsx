@@ -7,6 +7,13 @@ import { Input } from "@/components/ui/input";
 const Students = () => {
   const [students, setStudents] = useState([]);
   const [editingId, setEditingId] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [payments, setPayments] = useState([]);
+  const [paymentForm, setPaymentForm] = useState({
+    amount: "",
+    reason: "",
+    dueDate: "",
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -104,6 +111,50 @@ const Students = () => {
       className: "",
     });
   };
+  const fetchPayments = async (studentId) => {
+    const res = await fetch(
+      `http://localhost:3000/api/admin/students/${studentId}/payments`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    const data = await res.json();
+    setPayments(data);
+  };
+
+  const togglePayment = async (id) => {
+    await fetch(`http://localhost:3000/api/admin/payments/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    fetchPayments(selectedStudent._id);
+  };
+  const handleAssignPayment = async (e) => {
+    e.preventDefault();
+
+    await fetch("http://localhost:3000/api/admin/payments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        studentId: selectedStudent._id,
+        reason: paymentForm.reason,
+        amount: paymentForm.amount,
+        dueDate: paymentForm.dueDate,
+      }),
+    });
+
+    setPaymentForm({ amount: "", dueDate: "", reason: "" });
+    fetchPayments(selectedStudent._id);
+  };
 
   return (
     <div className="space-y-8">
@@ -186,6 +237,17 @@ const Students = () => {
                     </Button>
 
                     <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={() => {
+                        setSelectedStudent(student);
+                        fetchPayments(student._id);
+                      }}
+                    >
+                      Payments
+                    </Button>
+
+                    <Button
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDelete(student._id)}
@@ -207,6 +269,73 @@ const Students = () => {
           </table>
         </div>
       </div>
+      {selectedStudent && (
+        <div className="bg-white p-6 rounded-xl shadow-sm border">
+          <h2 className="text-lg font-semibold mb-4">
+            Payments for {selectedStudent.name}
+          </h2>
+
+          <form onSubmit={handleAssignPayment} className="flex gap-3 mb-6">
+            <Input
+              type="number"
+              placeholder="Amount"
+              value={paymentForm.amount}
+              onChange={(e) =>
+                setPaymentForm({ ...paymentForm, amount: e.target.value })
+              }
+              required
+            />
+
+            <Input
+              type="text"
+              placeholder="Reason (e.g., Tuition Fee - Jan)"
+              value={paymentForm.reason}
+              onChange={(e) =>
+                setPaymentForm({ ...paymentForm, reason: e.target.value })
+              }
+              required
+            />
+
+            <Input
+              type="date"
+              value={paymentForm.dueDate}
+              onChange={(e) =>
+                setPaymentForm({ ...paymentForm, dueDate: e.target.value })
+              }
+              required
+            />
+
+            <Button type="submit">Assign</Button>
+          </form>
+
+          <table className="w-full text-sm">
+            <thead className="border-b">
+              <tr>
+                <th>Amount</th>
+                <th>Reason</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((p) => (
+                <tr key={p._id} className="border-b text-center">
+                  <td>₹{p.amount}</td>
+                  <td>{p.reason}</td>
+                  <td>{new Date(p.dueDate).toLocaleDateString()}</td>
+                  <td>{p.status}</td>
+                  <td>
+                    <Button size="sm" onClick={() => togglePayment(p._id)}>
+                      Toggle
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

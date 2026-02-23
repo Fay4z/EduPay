@@ -4,13 +4,18 @@ const paymentSchema = new mongoose.Schema(
   {
     student: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Student",
       required: true,
     },
     school: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "School",
       required: true,
+    },
+    reason: {
+      type: String,
+      required: true,
+      trim: true,
     },
     amount: {
       type: Number,
@@ -23,6 +28,7 @@ const paymentSchema = new mongoose.Schema(
     },
     dueDate: {
       type: Date,
+      required: true,
     },
   },
   { timestamps: true },

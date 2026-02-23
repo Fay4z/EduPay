@@ -27,7 +27,7 @@ app.use(passport.initialize());
 app.use(express.json());
 
 app.use("/api/auth", appRoutes);
-app.use("/api/payment", paymentRoutes);
+app.use("/api/admin", paymentRoutes);
 app.use("/api/school", schoolRoutes);
 app.use("/api/admin", adminRoutes);
 
