@@ -3,7 +3,7 @@ const Payment = require("../models/Payment");
 
 const getDashboardStats = async (req, res) => {
   try {
-    const schoolId = req.user.schoolId;
+    const schoolId = req.user.school;
 
     const totalStudents = await Student.countDocuments({ school: schoolId });
 
@@ -53,11 +53,6 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
-const addStudent = async (req, res) => {
-  res.send("good");
-};
-
 module.exports = {
   getDashboardStats,
-  addStudent,
 };

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const Student = require("../models/Student");
 
 const protect = async (req, res, next) => {
   let token;
@@ -13,16 +14,28 @@ const protect = async (req, res, next) => {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      req.user = await User.findById(decoded.id).select("-password");
+      let user;
+
+      if (decoded.role === "admin") {
+        user = await User.findById(decoded.id).select("-password");
+      } else if (decoded.role === "student") {
+        user = await Student.findById(decoded.id).select("-password");
+      }
+
+      if (!user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
+      user.role = decoded.role;
+
+      req.user = user;
 
       next();
     } catch (error) {
-      res.status(401).json({ message: "Not authorized" });
+      return res.status(401).json({ message: "Not authorized" });
     }
-  }
-
-  if (!token) {
-    res.status(401).json({ message: "No token" });
+  } else {
+    return res.status(401).json({ message: "No token" });
   }
 };
 

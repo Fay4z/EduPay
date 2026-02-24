@@ -17,7 +17,6 @@ const {
 } = require("../controllers/paymentController");
 
 router.get("/dashboard-stats", protect, authorize("admin"), getDashboardStats);
-router.get("/addStudent", protect, authorize("admin"), addStudent);
 router.post("/students", protect, authorize("admin"), createStudent);
 router.get("/students", protect, authorize("admin"), getStudents);
 router.get("/students/:id", protect, authorize("admin"), getSingleStudent);

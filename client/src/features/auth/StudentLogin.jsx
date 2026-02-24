@@ -20,7 +20,7 @@ const formSchema = z.object({
   password: z.string().min(8, "Password must be at least 8 characters long"),
 });
 
-const Login = () => {
+const StudentLogin = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
@@ -37,7 +37,7 @@ const Login = () => {
     setLoading(true);
     try {
       const response = await fetch(
-        "http://localhost:3000/api/auth/admin-login",
+        "http://localhost:3000/api/auth/student-login",
         {
           method: "POST",
           headers: {
@@ -56,11 +56,11 @@ const Login = () => {
         throw new Error(result.message || "Login failed");
       }
 
-      login(result.email, result.token, result.role);
+      login(result.email, result.token, "student");
 
       form.reset();
 
-      navigate("/admindashboard");
+      navigate("/studentdashboard");
     } catch (error) {
       console.error("Error:", error.message);
       alert(error.message);
@@ -73,7 +73,9 @@ const Login = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted/70">
       <div className="relative w-full max-w-sm overflow-hidden rounded-xl border bg-card px-8 py-8 shadow-lg/5 dark:shadow-xl">
         <div className="relative isolate flex flex-col items-center">
-          <p className="mt-4 font-semibold text-xl tracking-tight">Log in</p>
+          <p className="mt-4 font-semibold text-xl tracking-tight">
+            Student Login
+          </p>
 
           <Form {...form}>
             <form
@@ -127,26 +129,17 @@ const Login = () => {
           <div className="mt-5 space-y-5">
             <NavLink
               className="block text-center text-muted-foreground text-sm underline"
-              to="/student/login"
+              to="/login"
             >
-              Login as Student
+              Login as Admin
             </NavLink>
+
             <NavLink
               className="block text-center text-muted-foreground text-sm underline"
               to="#"
             >
               Forgot your password?
             </NavLink>
-
-            <p className="text-center text-sm">
-              Don&apos;t have an account?
-              <NavLink
-                className="ml-1 text-muted-foreground underline"
-                to="/signup"
-              >
-                Create account
-              </NavLink>
-            </p>
           </div>
         </div>
       </div>
@@ -154,4 +147,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default StudentLogin;

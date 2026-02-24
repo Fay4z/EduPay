@@ -20,6 +20,7 @@ const Students = () => {
     email: "",
     rollNumber: "",
     className: "",
+    password: "",
   });
 
   const token = localStorage.getItem("token");
@@ -109,6 +110,7 @@ const Students = () => {
       email: "",
       rollNumber: "",
       className: "",
+      password: "",
     });
   };
   const fetchPayments = async (studentId) => {
@@ -192,6 +194,15 @@ const Students = () => {
             name="className"
             placeholder="Class"
             value={formData.className}
+            onChange={handleChange}
+            required
+          />
+
+          <Input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
             onChange={handleChange}
             required
           />

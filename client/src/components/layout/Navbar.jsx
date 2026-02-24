@@ -1,9 +1,7 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 
 const MENU_ITEMS = [{ label: "Home", href: "/" }];

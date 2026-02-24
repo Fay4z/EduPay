@@ -5,10 +5,11 @@ const connectDB = require("./config/db.js");
 const passport = require("./config/passport.js");
 require("node:dns/promises").setServers(["1.1.1.1", "8.8.8.8"]);
 
-const appRoutes = require("./routes/authRoutes.js");
+const authRoutes = require("./routes/authRoutes.js");
 const paymentRoutes = require("./routes/paymentRoutes.js");
 const schoolRoutes = require("./routes/schoolRoutes.js");
 const adminRoutes = require("./routes/adminRoutes.js");
+const studentRoutes = require("./routes/studentRoutes.js");
 
 require("dotenv").config();
 
@@ -26,10 +27,11 @@ app.use(morgan("dev"));
 app.use(passport.initialize());
 app.use(express.json());
 
-app.use("/api/auth", appRoutes);
+app.use("/api/auth", authRoutes);
 app.use("/api/admin", paymentRoutes);
 app.use("/api/school", schoolRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/student", studentRoutes);
 
 app.get("/", (req, res) => {
   res.send("hello world");

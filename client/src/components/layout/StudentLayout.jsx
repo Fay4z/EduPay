@@ -18,27 +18,25 @@ const SidebarLink = ({ to, label }) => (
   </NavLink>
 );
 
-const AdminLayout = () => {
+const StudentLayout = () => {
   const { userEmail, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/student/login");
   };
 
   return (
     <div className="flex min-h-screen bg-muted/40">
       <aside className="w-64 bg-white border-r hidden md:flex flex-col justify-between p-5">
         <div>
-          <h2 className="text-xl font-bold mb-8">EduPay Admin</h2>
+          <h2 className="text-xl font-bold mb-8">EduPay Student</h2>
 
           <nav className="space-y-2">
-            <SidebarLink to="/admindashboard" label="Dashboard" />
-            <SidebarLink to="/admindashboard/students" label="Students" />
-            <SidebarLink to="/admindashboard/fees" label="Fees" />
-            <SidebarLink to="/admindashboard/payments" label="Payments" />
-            <SidebarLink to="/admindashboard/settings" label="Settings" />
+            <SidebarLink to="/studentdashboard" label="Dashboard" />
+            <SidebarLink to="/studentdashboard/payments" label="My Payments" />
+            <SidebarLink to="/studentdashboard/profile" label="Profile" />
           </nav>
         </div>
 
@@ -56,9 +54,8 @@ const AdminLayout = () => {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top bar (optional) */}
         <header className="bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h1 className="font-semibold text-lg">Admin Dashboard</h1>
+          <h1 className="font-semibold text-lg">Student Dashboard</h1>
         </header>
 
         <main className="flex-1 p-6">
@@ -69,4 +66,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default StudentLayout;
