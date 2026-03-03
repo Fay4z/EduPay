@@ -20,7 +20,7 @@ const StudentDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const token = localStorage.getItem("token"); // using same token storage
+        const token = localStorage.getItem("token");
 
         const response = await fetch(
           "http://localhost:3000/api/student/dashboard-stats",
@@ -61,17 +61,17 @@ const StudentDashboard = () => {
 
         <StatCard
           title="Total Amount"
-          value={`₹ ${stats.totalAmount.toLocaleString()}`}
+          value={`Rs. ${stats.totalAmount.toLocaleString()}`}
         />
 
         <StatCard
           title="Paid Amount"
-          value={`₹ ${stats.paidAmount.toLocaleString()}`}
+          value={`Rs. ${stats.paidAmount.toLocaleString()}`}
         />
 
         <StatCard
           title="Unpaid Amount"
-          value={`₹ ${stats.unpaidAmount.toLocaleString()}`}
+          value={`Rs. ${stats.unpaidAmount.toLocaleString()}`}
         />
       </div>
     </div>

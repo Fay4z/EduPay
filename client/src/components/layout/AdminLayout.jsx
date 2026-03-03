@@ -19,14 +19,13 @@ const SidebarLink = ({ to, label }) => (
 );
 
 const AdminLayout = () => {
-  const { userEmail, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     navigate("/login");
   };
-
   return (
     <div className="flex min-h-screen bg-muted/40">
       <aside className="w-64 bg-white border-r hidden md:flex flex-col justify-between p-5">
@@ -43,7 +42,7 @@ const AdminLayout = () => {
         </div>
 
         <div className="border-t pt-4 space-y-3">
-          <p className="text-sm font-medium truncate">{userEmail}</p>
+          <p className="text-sm font-medium truncate">{user.email}</p>
           <Button
             variant="destructive"
             className="w-full"
@@ -54,9 +53,7 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
-        {/* Top bar (optional) */}
         <header className="bg-white border-b px-6 py-4 flex justify-between items-center">
           <h1 className="font-semibold text-lg">Admin Dashboard</h1>
         </header>

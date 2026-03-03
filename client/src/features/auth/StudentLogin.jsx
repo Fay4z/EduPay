@@ -33,7 +33,7 @@ const StudentLogin = () => {
     },
   });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (formData) => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -44,8 +44,8 @@ const StudentLogin = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: data.email,
-            password: data.password,
+            email: formData.email,
+            password: formData.password,
           }),
         },
       );
@@ -56,10 +56,9 @@ const StudentLogin = () => {
         throw new Error(result.message || "Login failed");
       }
 
-      login(result.email, result.token, "student");
+      login(result.user, result.token);
 
       form.reset();
-
       navigate("/studentdashboard");
     } catch (error) {
       console.error("Error:", error.message);

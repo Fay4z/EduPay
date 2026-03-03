@@ -56,7 +56,7 @@ const Login = () => {
         throw new Error(result.message || "Login failed");
       }
 
-      login(result.email, result.token, result.role);
+      login(result.user, result.token, result);
 
       form.reset();
 

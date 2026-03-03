@@ -1,29 +1,61 @@
+// import { createContext, useState, useEffect } from "react";
+
+// export const AuthContext = createContext();
+
+// export const AuthProvider = ({ children }) => {
+//   const [userEmail, setUserEmail] = useState(null);
+
+//   useEffect(() => {
+//     const email = localStorage.getItem("email");
+//     if (email) setUserEmail(email);
+//   }, []);
+
+//   const login = (email, token, role) => {
+//     localStorage.setItem("token", token);
+//     localStorage.setItem("email", email);
+//     localStorage.setItem("role", role);
+//     setUserEmail(email);
+//   };
+
+//   const logout = () => {
+//     localStorage.clear();
+//     setUserEmail(null);
+//   };
+
+//   return (
+//     <AuthContext.Provider value={{ userEmail, login, logout }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
 import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [userEmail, setUserEmail] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const email = localStorage.getItem("email");
-    if (email) setUserEmail(email);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
-  const login = (email, token, role) => {
+  const login = (userData, token) => {
     localStorage.setItem("token", token);
-    localStorage.setItem("email", email);
-    localStorage.setItem("role", role);
-    setUserEmail(email);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setUser(userData);
   };
 
   const logout = () => {
     localStorage.clear();
-    setUserEmail(null);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ userEmail, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

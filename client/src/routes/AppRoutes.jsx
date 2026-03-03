@@ -12,6 +12,8 @@ import Settings from "@/features/admin/Settings";
 import StudentLogin from "@/features/auth/StudentLogin";
 import StudentDashboard from "@/features/student/StudentDashboard";
 import StudentLayout from "@/components/layout/StudentLayout";
+import Profile from "@/features/student/Profile";
+import StudentPayment from "@/features/student/StudentPayment";
 
 function AppRoutes() {
   return (
@@ -36,6 +38,8 @@ function AppRoutes() {
 
           <Route path="/studentdashboard" element={<StudentLayout />}>
             <Route index element={<StudentDashboard />} />
+            <Route path="payments" element={<StudentPayment />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Routes>
       </BrowserRouter>
