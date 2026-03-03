@@ -59,7 +59,12 @@ const StudentLogin = () => {
       login(result.user, result.token);
 
       form.reset();
-      navigate("/studentdashboard");
+
+      if (result.user.role == "admin") {
+        navigate("/admindashboard");
+      } else if (result.user.role == "student") {
+        navigate("/studentdashboard");
+      }
     } catch (error) {
       console.error("Error:", error.message);
       alert(error.message);

@@ -59,8 +59,11 @@ const Login = () => {
       login(result.user, result.token, result);
 
       form.reset();
-
-      navigate("/admindashboard");
+      if (result.user.role == "admin") {
+        navigate("/admindashboard");
+      } else if (result.user.role == "student") {
+        navigate("/studentdashboard");
+      }
     } catch (error) {
       console.error("Error:", error.message);
       alert(error.message);

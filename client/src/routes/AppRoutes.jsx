@@ -14,6 +14,7 @@ import StudentDashboard from "@/features/student/StudentDashboard";
 import StudentLayout from "@/components/layout/StudentLayout";
 import Profile from "@/features/student/Profile";
 import StudentPayment from "@/features/student/StudentPayment";
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRoutes() {
   return (
@@ -28,7 +29,14 @@ function AppRoutes() {
             <Route path="register" element={<RegisterSchool />} />
           </Route>
 
-          <Route path="/admindashboard" element={<AdminLayout />}>
+          <Route
+            path="/admindashboard"
+            element={
+              <ProtectedRoute allowedRole="admin">
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<AdminDashboard />} />
             <Route path="students" element={<Students />} />
             <Route path="fees" element={<Fees />} />
@@ -36,7 +44,14 @@ function AppRoutes() {
             <Route path="settings" element={<Settings />} />
           </Route>
 
-          <Route path="/studentdashboard" element={<StudentLayout />}>
+          <Route
+            path="/studentdashboard"
+            element={
+              <ProtectedRoute allowedRole="student">
+                <StudentLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<StudentDashboard />} />
             <Route path="payments" element={<StudentPayment />} />
             <Route path="profile" element={<Profile />} />

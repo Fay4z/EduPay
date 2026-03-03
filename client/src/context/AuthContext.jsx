@@ -1,34 +1,4 @@
-// import { createContext, useState, useEffect } from "react";
-
-// export const AuthContext = createContext();
-
-// export const AuthProvider = ({ children }) => {
-//   const [userEmail, setUserEmail] = useState(null);
-
-//   useEffect(() => {
-//     const email = localStorage.getItem("email");
-//     if (email) setUserEmail(email);
-//   }, []);
-
-//   const login = (email, token, role) => {
-//     localStorage.setItem("token", token);
-//     localStorage.setItem("email", email);
-//     localStorage.setItem("role", role);
-//     setUserEmail(email);
-//   };
-
-//   const logout = () => {
-//     localStorage.clear();
-//     setUserEmail(null);
-//   };
-
-//   return (
-//     <AuthContext.Provider value={{ userEmail, login, logout }}>
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };
-
+import { jwtDecode } from "jwt-decode";
 import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
@@ -36,12 +6,10 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+  };
 
   const login = (userData, token) => {
     localStorage.setItem("token", token);
@@ -49,10 +17,24 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
   };
 
-  const logout = () => {
-    localStorage.clear();
-    setUser(null);
-  };
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+
+    if (storedUser && token) {
+      try {
+        const decoded = jwtDecode(token);
+
+        if (decoded.exp * 1000 < Date.now()) {
+          logout();
+        } else {
+          setUser(JSON.parse(storedUser));
+        }
+      } catch (error) {
+        logout();
+      }
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
