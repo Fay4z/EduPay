@@ -127,16 +127,6 @@ const Students = () => {
     setPayments(data);
   };
 
-  const togglePayment = async (id) => {
-    await fetch(`http://localhost:3000/api/admin/payments/${id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    fetchPayments(selectedStudent._id);
-  };
   const handleAssignPayment = async (e) => {
     e.preventDefault();
 
@@ -319,32 +309,63 @@ const Students = () => {
             <Button type="submit">Assign</Button>
           </form>
 
-          <table className="w-full text-sm">
-            <thead className="border-b">
-              <tr>
-                <th>Amount</th>
-                <th>Reason</th>
-                <th>Due Date</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {payments.map((p) => (
-                <tr key={p._id} className="border-b text-center">
-                  <td>₹{p.amount}</td>
-                  <td>{p.reason}</td>
-                  <td>{new Date(p.dueDate).toLocaleDateString()}</td>
-                  <td>{p.status}</td>
-                  <td>
-                    <Button size="sm" onClick={() => togglePayment(p._id)}>
-                      Toggle
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="bg-white rounded-2xl shadow-md border overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
+                  <tr>
+                    <th className="px-6 py-4 text-left">Amount</th>
+                    <th className="px-6 py-4 text-left">Reason</th>
+                    <th className="px-6 py-4 text-left">Due Date</th>
+                    <th className="px-6 py-4 text-left">Status</th>
+                  </tr>
+                </thead>
+
+                <tbody className="divide-y">
+                  {payments.length === 0 ? (
+                    <tr>
+                      <td
+                        colSpan="4"
+                        className="text-center py-10 text-gray-500"
+                      >
+                        No payments found
+                      </td>
+                    </tr>
+                  ) : (
+                    payments.map((p) => (
+                      <tr key={p._id} className="hover:bg-gray-50 transition">
+                        <td className="px-6 py-4 font-semibold text-gray-800">
+                          ₹ {p.amount}
+                        </td>
+
+                        <td className="px-6 py-4 text-gray-700">{p.reason}</td>
+
+                        <td className="px-6 py-4 text-gray-600">
+                          {new Date(p.dueDate).toLocaleDateString()}
+                        </td>
+
+                        <td className="px-6 py-4">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
+                              p.status === "paid"
+                                ? "bg-green-100 text-green-700"
+                                : p.status === "verification_pending"
+                                  ? "bg-blue-100 text-blue-700"
+                                  : p.status === "pending"
+                                    ? "bg-yellow-100 text-yellow-700"
+                                    : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {p.status.replace("_", " ")}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
     </div>

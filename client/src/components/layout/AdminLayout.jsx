@@ -35,6 +35,10 @@ const AdminLayout = () => {
           <nav className="space-y-2">
             <SidebarLink to="/admindashboard" label="Dashboard" />
             <SidebarLink to="/admindashboard/students" label="Students" />
+            <SidebarLink
+              to="/admindashboard/verifications"
+              label="Payment Verifications"
+            />
             <SidebarLink to="/admindashboard/fees" label="Fees" />
             <SidebarLink to="/admindashboard/payments" label="Payments" />
             <SidebarLink to="/admindashboard/settings" label="Settings" />

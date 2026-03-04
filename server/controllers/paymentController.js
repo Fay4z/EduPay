@@ -43,29 +43,67 @@ const getPaymentForSingleStudent = async (req, res) => {
   }
 };
 
-const togglePaymentStatus = async (req, res) => {
+const getVerificationPendingPayments = async (req, res) => {
   try {
-    const payment = await Payment.findOne({
-      _id: req.params.id,
+    const payments = await Payment.find({
+      status: "verification_pending",
       school: req.user.school,
-    });
+    }).populate("student", "name email");
 
-    if (!payment) {
-      return res.status(404).json({ message: "Payment not found" });
-    }
+    res.json(payments);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-    payment.status = payment.status === "pending" ? "paid" : "pending";
+const approvePaymentStatus = async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
 
+    if (!payment) return res.status(404).json({ message: "Not found" });
+
+    payment.status = "paid";
     await payment.save();
 
-    res.json(payment);
+    res.json({ message: "Payment approved" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Server error" });
   }
+};
+
+const rejectPaymentStatus = async (req, res) => {
+  try {
+    const payment = await Payment.findById(req.params.id);
+
+    if (!payment) return res.status(404).json({ message: "Not found" });
+
+    payment.status = "rejected";
+    await payment.save();
+
+    res.json({ message: "Payment rejected" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+const confirmPaymentRequest = async (req, res) => {
+  const payment = await Payment.findById(req.params.id);
+
+  if (!payment) {
+    return res.status(404).json({ message: "Not found" });
+  }
+
+  payment.status = "verification_pending";
+  await payment.save();
+
+  res.json(payment);
 };
 
 module.exports = {
   assignPayment,
   getPaymentForSingleStudent,
-  togglePaymentStatus,
+  getVerificationPendingPayments,
+  approvePaymentStatus,
+  rejectPaymentStatus,
+  confirmPaymentRequest,
 };

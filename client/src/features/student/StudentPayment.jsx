@@ -1,35 +1,73 @@
 import { useEffect, useState } from "react";
+import QRCode from "qrcode";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const StudentPayments = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [qrMap, setQrMap] = useState({});
+  const token = localStorage.getItem("token");
+
+  const fetchPayments = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/student/payments",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      const data = await response.json();
+      setPayments(data);
+    } catch (error) {
+      console.error("Error fetching payments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPayments = async () => {
-      try {
-        const token = localStorage.getItem("token");
-
-        const response = await fetch(
-          "http://localhost:3000/api/student/payments",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        const data = await response.json();
-        setPayments(data);
-      } catch (error) {
-        console.error("Error fetching payments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPayments();
   }, []);
+
+  const generateQR = async (payment) => {
+    const upiLink = `upi://pay?pa=test@upi&pn=EduPay School&am=${payment.amount}&cu=INR&tn=${payment.reason}`;
+
+    const qrImage = await QRCode.toDataURL(upiLink);
+
+    setQrMap((prev) => ({
+      ...prev,
+      [payment._id]: qrImage,
+    }));
+  };
+
+  const confirmPayment = async (id) => {
+    await fetch(`http://localhost:3000/api/admin/payment/confirm/${id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    fetchPayments();
+  };
+
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "paid":
+        return "bg-green-100 text-green-700";
+      case "verification_pending":
+        return "bg-blue-100 text-blue-700";
+      case "pending":
+        return "bg-yellow-100 text-yellow-700";
+      case "rejected":
+        return "bg-red-100 text-red-700";
+      default:
+        return "";
+    }
+  };
 
   if (loading) {
     return (
@@ -50,50 +88,65 @@ const StudentPayments = () => {
           {payments.length === 0 ? (
             <p className="text-gray-500">No payments found.</p>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="border-b text-left">
-                    <th className="py-3">Reason</th>
-                    <th className="py-3">Amount</th>
-                    <th className="py-3">Due Date</th>
-                    <th className="py-3">Paid On</th>
-                    <th className="py-3">Status</th>
-                  </tr>
-                </thead>
+            <div className="space-y-6">
+              {payments.map((payment) => (
+                <div
+                  key={payment._id}
+                  className="border p-4 rounded-xl shadow-sm"
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="font-semibold">{payment.reason}</p>
+                      <p>₹ {payment.amount}</p>
+                      <p>
+                        Due: {new Date(payment.dueDate).toLocaleDateString()}
+                      </p>
+                    </div>
 
-                <tbody>
-                  {payments.map((payment) => (
-                    <tr key={payment._id} className="border-b">
-                      <td className="py-3">{payment.reason}</td>
+                    <span
+                      className={`px-3 py-1 rounded-full text-sm capitalize ${getStatusStyle(
+                        payment.status,
+                      )}`}
+                    >
+                      {payment.status}
+                    </span>
+                  </div>
 
-                      <td className="py-3 font-medium">₹ {payment.amount}</td>
+                  {payment.status === "pending" && (
+                    <div className="mt-4">
+                      <button
+                        onClick={() => generateQR(payment)}
+                        className="bg-blue-600 text-white px-4 py-2 rounded"
+                      >
+                        Pay Now
+                      </button>
+                    </div>
+                  )}
 
-                      <td className="py-3">
-                        {new Date(payment.dueDate).toLocaleDateString()}
-                      </td>
+                  {qrMap[payment._id] && (
+                    <div className="mt-4 text-center">
+                      <img
+                        src={qrMap[payment._id]}
+                        alt="QR Code"
+                        className="mx-auto mb-4"
+                      />
 
-                      <td className="py-3">
-                        {payment.status === "paid"
-                          ? new Date(payment.updatedAt).toLocaleDateString()
-                          : "-"}
-                      </td>
+                      <button
+                        onClick={() => confirmPayment(payment._id)}
+                        className="bg-green-600 text-white px-4 py-2 rounded"
+                      >
+                        I Have Paid
+                      </button>
+                    </div>
+                  )}
 
-                      <td className="py-3">
-                        <span
-                          className={`px-3 py-1 rounded-full text-sm capitalize ${
-                            payment.status === "paid"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {payment.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                  {payment.status === "paid" && (
+                    <p className="mt-2 text-sm text-gray-500">
+                      Paid on {new Date(payment.updatedAt).toLocaleDateString()}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </CardContent>

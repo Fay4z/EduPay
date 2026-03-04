@@ -15,6 +15,7 @@ import StudentLayout from "@/components/layout/StudentLayout";
 import Profile from "@/features/student/Profile";
 import StudentPayment from "@/features/student/StudentPayment";
 import ProtectedRoute from "./ProtectedRoute";
+import AdminVerificationPage from "@/features/admin/AdminVerificationPage";
 
 function AppRoutes() {
   return (
@@ -25,7 +26,6 @@ function AppRoutes() {
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="student/login" element={<StudentLogin />} />
-            {/* <Route path="signup" element={<Signup />} /> */}
             <Route path="register" element={<RegisterSchool />} />
           </Route>
 
@@ -39,6 +39,7 @@ function AppRoutes() {
           >
             <Route index element={<AdminDashboard />} />
             <Route path="students" element={<Students />} />
+            <Route path="verifications" element={<AdminVerificationPage />} />
             <Route path="fees" element={<Fees />} />
             <Route path="payments" element={<Payments />} />
             <Route path="settings" element={<Settings />} />

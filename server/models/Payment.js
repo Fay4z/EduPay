@@ -23,7 +23,7 @@ const paymentSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "paid"],
+      enum: ["pending", "verification_pending", "paid", "rejected"],
       default: "pending",
     },
     dueDate: {
