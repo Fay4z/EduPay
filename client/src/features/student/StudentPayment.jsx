@@ -3,6 +3,9 @@ import QRCode from "qrcode";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const StudentPayments = () => {
+  const UPI_ID = import.meta.env.VITE_UPI_ID;
+  const MERCHANT_NAME = import.meta.env.VITE_MERCHANT_NAME;
+
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [qrMap, setQrMap] = useState({});
@@ -33,7 +36,7 @@ const StudentPayments = () => {
   }, []);
 
   const generateQR = async (payment) => {
-    const upiLink = `upi://pay?pa=test@upi&pn=EduPay School&am=${payment.amount}&cu=INR&tn=${payment.reason}`;
+    const upiLink = `upi://pay?pa=${UPI_ID}&pn=${MERCHANT_NAME}&am=${payment.amount}&cu=INR&tn=${payment.reason}`;
 
     const qrImage = await QRCode.toDataURL(upiLink);
 
@@ -140,6 +143,7 @@ const StudentPayments = () => {
                     </div>
                   )}
 
+                  {/* Paid Date */}
                   {payment.status === "paid" && (
                     <p className="mt-2 text-sm text-gray-500">
                       Paid on {new Date(payment.updatedAt).toLocaleDateString()}
