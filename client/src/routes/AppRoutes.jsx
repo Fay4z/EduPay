@@ -6,9 +6,6 @@ import RegisterSchool from "@/features/auth/RegisterSchool";
 import AdminDashboard from "@/features/admin/AdminDashboard";
 import AdminLayout from "@/components/layout/AdminLayout";
 import Students from "@/features/admin/Students";
-import Fees from "@/features/admin/Fees";
-import Payments from "@/features/admin/Payments";
-import Settings from "@/features/admin/Settings";
 import StudentLogin from "@/features/auth/StudentLogin";
 import StudentDashboard from "@/features/student/StudentDashboard";
 import StudentLayout from "@/components/layout/StudentLayout";
@@ -40,9 +37,6 @@ function AppRoutes() {
             <Route index element={<AdminDashboard />} />
             <Route path="students" element={<Students />} />
             <Route path="verifications" element={<AdminVerificationPage />} />
-            <Route path="fees" element={<Fees />} />
-            <Route path="payments" element={<Payments />} />
-            <Route path="settings" element={<Settings />} />
           </Route>
 
           <Route

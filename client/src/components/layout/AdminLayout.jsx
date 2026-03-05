@@ -34,14 +34,14 @@ const AdminLayout = () => {
 
           <nav className="space-y-2">
             <SidebarLink to="/admindashboard" label="Dashboard" />
-            <SidebarLink to="/admindashboard/students" label="Students" />
+            <SidebarLink
+              to="/admindashboard/students"
+              label="Manage Students"
+            />
             <SidebarLink
               to="/admindashboard/verifications"
               label="Payment Verifications"
             />
-            <SidebarLink to="/admindashboard/fees" label="Fees" />
-            <SidebarLink to="/admindashboard/payments" label="Payments" />
-            <SidebarLink to="/admindashboard/settings" label="Settings" />
           </nav>
         </div>
 
@@ -59,7 +59,9 @@ const AdminLayout = () => {
 
       <div className="flex-1 flex flex-col">
         <header className="bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h1 className="font-semibold text-lg">Admin Dashboard</h1>
+          <h1 className="font-semibold text-lg">
+            {user.school.name}'s Admin Dashboard
+          </h1>
         </header>
 
         <main className="flex-1 p-6">

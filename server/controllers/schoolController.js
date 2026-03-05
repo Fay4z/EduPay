@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const registerSchool = async (req, res) => {
   try {
-    const { schoolName, address, adminName, email, password } = req.body;
+    const { schoolName, address, adminName, email, upiId, password } = req.body;
 
     const existingSchool = await School.findOne({ name: schoolName });
     if (existingSchool) {
@@ -15,6 +15,7 @@ const registerSchool = async (req, res) => {
 
     const school = await School.create({
       name: schoolName,
+      upiId,
       address,
     });
 

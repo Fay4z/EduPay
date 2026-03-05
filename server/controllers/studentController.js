@@ -111,7 +111,9 @@ const getMyPayments = async (req, res) => {
   try {
     const payments = await Payment.find({
       student: req.user._id,
-    }).sort({ createdAt: -1 });
+    })
+      .sort({ createdAt: -1 })
+      .populate("school", "name upiId");
 
     res.json(payments);
   } catch (error) {

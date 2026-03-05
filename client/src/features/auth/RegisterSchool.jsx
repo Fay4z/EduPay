@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,6 +20,11 @@ const formSchema = z
     adminName: z.string().min(2, "Admin name is required"),
     email: z.string().email(),
     phone: z.string().min(10, "Phone number must be at least 10 digits"),
+    upiId: z
+      .string()
+      .toLowerCase()
+      .min(3, "UPI ID is required")
+      .regex(/^[\w.-]+@[\w.-]+$/, "Invalid UPI ID format"),
     password: z.string().min(8, "Password must be at least 8 characters long"),
     confirmPassword: z.string(),
   })
@@ -40,6 +43,7 @@ const RegisterSchool = () => {
       adminName: "",
       email: "",
       phone: "",
+      upiId: "",
       password: "",
       confirmPassword: "",
     },
@@ -60,6 +64,7 @@ const RegisterSchool = () => {
             adminName: data.adminName,
             email: data.email,
             phone: data.phone,
+            upiId: data.upiId,
             password: data.password,
           }),
         },
@@ -96,7 +101,6 @@ const RegisterSchool = () => {
             className="mt-8 space-y-6"
             onSubmit={form.handleSubmit(onSubmit)}
           >
-            {/* 2 Column Grid */}
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <FormField
                 control={form.control}
@@ -164,6 +168,20 @@ const RegisterSchool = () => {
 
               <FormField
                 control={form.control}
+                name="upiId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>School UPI ID</FormLabel>
+                    <FormControl>
+                      <Input placeholder="example@upi" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="password"
                 render={({ field }) => (
                   <FormItem>
@@ -199,7 +217,6 @@ const RegisterSchool = () => {
               />
             </div>
 
-            {/* Register Button Full Width */}
             <Button className="w-full mt-4" type="submit" disabled={loading}>
               {loading ? "Registering..." : "Register School"}
             </Button>

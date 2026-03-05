@@ -19,7 +19,7 @@ const SidebarLink = ({ to, label }) => (
 );
 
 const StudentLayout = () => {
-  const { userEmail, logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -41,7 +41,7 @@ const StudentLayout = () => {
         </div>
 
         <div className="border-t pt-4 space-y-3">
-          <p className="text-sm font-medium truncate">{userEmail}</p>
+          <p className="text-sm font-medium truncate">{user.email}</p>
           <Button
             variant="destructive"
             className="w-full"
@@ -52,10 +52,9 @@ const StudentLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <header className="bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h1 className="font-semibold text-lg">Student Dashboard</h1>
+          <h1 className="font-semibold text-lg">{user.name}'s Dashboard</h1>
         </header>
 
         <main className="flex-1 p-6">

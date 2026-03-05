@@ -87,7 +87,10 @@ const rejectPaymentStatus = async (req, res) => {
 };
 
 const confirmPaymentRequest = async (req, res) => {
-  const payment = await Payment.findById(req.params.id);
+  const payment = await Payment.findById(req.params.id).populate(
+    "school",
+    "name upiId",
+  );
 
   if (!payment) {
     return res.status(404).json({ message: "Not found" });

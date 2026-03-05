@@ -9,7 +9,7 @@ passport.use(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).populate("school", "name");
 
         if (!user) {
           return done(null, false, { message: "User not found" });
@@ -35,7 +35,10 @@ passport.use(
     { usernameField: "email" },
     async (email, password, done) => {
       try {
-        const student = await Student.findOne({ email });
+        const student = await Student.findOne({ email }).populate(
+          "school",
+          "name",
+        );
 
         if (!student) {
           return done(null, false, { message: "student not found" });

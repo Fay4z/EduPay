@@ -6,6 +6,10 @@ const schoolSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    upiId: {
+      type: String,
+      required: true,
+    },
     address: String,
   },
   { timestamps: true },

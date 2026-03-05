@@ -137,13 +137,6 @@ const StudentLogin = () => {
             >
               Login as Admin
             </NavLink>
-
-            <NavLink
-              className="block text-center text-muted-foreground text-sm underline"
-              to="#"
-            >
-              Forgot your password?
-            </NavLink>
           </div>
         </div>
       </div>

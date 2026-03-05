@@ -32,7 +32,6 @@ const AdminDashboard = () => {
         );
 
         const data = await response.json();
-        console.log(data);
         setStats(data);
       } catch (error) {
         console.error("Failed to fetch stats", error);
@@ -42,9 +41,10 @@ const AdminDashboard = () => {
     fetchStats();
   }, []);
 
-  console.log("hello");
   if (!stats) {
-    return <p>Loading dashboard...</p>;
+    return (
+      <div className="p-6 text-center text-gray-500">Loading payments...</div>
+    );
   }
 
   return (

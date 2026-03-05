@@ -317,6 +317,7 @@ const Students = () => {
                     <th className="px-6 py-4 text-left">Amount</th>
                     <th className="px-6 py-4 text-left">Reason</th>
                     <th className="px-6 py-4 text-left">Due Date</th>
+                    <th className="px-6 py-4 text-left">Paid On</th>
                     <th className="px-6 py-4 text-left">Status</th>
                   </tr>
                 </thead>
@@ -342,6 +343,10 @@ const Students = () => {
 
                         <td className="px-6 py-4 text-gray-600">
                           {new Date(p.dueDate).toLocaleDateString()}
+                        </td>
+
+                        <td className="px-6 py-4 text-gray-600">
+                          {new Date(p.updatedAt).toLocaleDateString()}
                         </td>
 
                         <td className="px-6 py-4">

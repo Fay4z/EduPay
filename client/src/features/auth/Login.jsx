@@ -76,7 +76,9 @@ const Login = () => {
     <div className="flex min-h-screen items-center justify-center bg-muted/70">
       <div className="relative w-full max-w-sm overflow-hidden rounded-xl border bg-card px-8 py-8 shadow-lg/5 dark:shadow-xl">
         <div className="relative isolate flex flex-col items-center">
-          <p className="mt-4 font-semibold text-xl tracking-tight">Log in</p>
+          <p className="mt-4 font-semibold text-xl tracking-tight">
+            Log in as Admin
+          </p>
 
           <Form {...form}>
             <form
@@ -134,20 +136,14 @@ const Login = () => {
             >
               Login as Student
             </NavLink>
-            <NavLink
-              className="block text-center text-muted-foreground text-sm underline"
-              to="#"
-            >
-              Forgot your password?
-            </NavLink>
 
             <p className="text-center text-sm">
               Don&apos;t have an account?
               <NavLink
                 className="ml-1 text-muted-foreground underline"
-                to="/signup"
+                to="/register"
               >
-                Create account
+                Register School
               </NavLink>
             </p>
           </div>
